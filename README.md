@@ -1,0 +1,7 @@
+## Laptop Inventory Script
+
+Run the following command in a Windows PowerShell terminal to generate the formatted device report. You can paste the output directly into the inventory form.
+
+```powershell
+[PSCustomObject]@{ 'Device Hostname' = $env:COMPUTERNAME; 'Make & Model' = "$((Get-CimInstance Win32_ComputerSystem).Manufacturer)$((Get-CimInstance Win32_ComputerSystem).Model)"; 'Serial Number (S/N)' = (Get-CimInstance Win32_BIOS).SerialNumber; 'Processor (CPU)' = (Get-CimInstance Win32_Processor | Select-Object -First 1).Name; 'RAM (GB)' = [math]::Round(((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory) / 1GB, 2); 'Storage (GB)' = [math]::Round(((Get-CimInstance Win32_DiskDrive | Where-Object MediaType -match 'hard' | Measure-Object -Property Size -Sum).Sum) / 1GB, 2); 'GPU / Graphics' = (Get-CimInstance Win32_VideoController).Name -join ', '; 'Operating System' = (Get-CimInstance Win32_OperatingSystem).Caption; 'Purchase Date' = "Not tracked natively (OS Install Date: $((Get-CimInstance Win32_OperatingSystem).InstallDate.ToString('yyyy-MM-dd')))"; 'Warranty Expiration' = "Not tracked natively (Check OEM Website with S/N)"; 'MAC Address' = (Get-CimInstance Win32_NetworkAdapterConfiguration | Where-Object IPEnabled | Select-Object -ExpandProperty MACAddress) -join ', ' } | Format-List
+```
