@@ -17,7 +17,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       <Tabs defaultValue="record" className="w-full">
-        <TabsList className="grid w-full max-w-[400px] grid-cols-2 mb-6">
+        <TabsList className="grid w-full max-w-100 grid-cols-2 mb-6">
           <TabsTrigger value="record">Record Device</TabsTrigger>
           <TabsTrigger value="table">View Devices ({items.length})</TabsTrigger>
         </TabsList>
