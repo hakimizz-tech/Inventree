@@ -25,5 +25,5 @@ sudo printf "%-22s : %s\n" \
   "Operating System" "$(. /etc/os-release && echo "$PRETTY_NAME")" \
   "Purchase Date" "Not tracked natively (OS Install Date: $(stat -c %w / 2>/dev/null | cut -d' ' -f1))" \
   "Warranty Expiration" "Not tracked natively (Check OEM Website with S/N)" \
-  "MAC Address" "$(ip -o -4 addr show up scope global | awk '{print $2}' | sort -u | xargs -I{} cat /sys/class/net/{}/address 2>/dev/null | paste -sd ', ' -)"
+  "MAC Address" "$(for iface in /sys/class/net/*; do [ ! -d "/sys/devices/virtual/net/$(basename "$iface")" ] && cat "$iface/address" 2>/dev/null; done | grep -Eiv '^00:00:00:00:00:00$|^$' | paste -sd ',' - | sed 's/,/, /g')"
 ```
